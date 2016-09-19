@@ -298,3 +298,83 @@ def deserializeDouble(instream):
     val = math.ldexp(val,exp)
     return(val)
 
+def serializeString8(outstream, string):
+    """
+    Serialize a string with a length in the range (0 <= len < 256).
+    """
+
+    serializeByte(outstream, len(string))
+    outstream.write(string)
+
+def deserializeString8(instream):
+    """
+    Deserialize a string with a length in the range (0 <= len < 256).
+    """
+
+    string_len = deserializeByte(instream)
+    return instream.read(string_len)
+
+def serializeString16(outstream, string):
+    """
+    Serialize a string with a length in the range (0 <= len < 2^16).
+    """
+
+    serializeShort(outstream, len(string))
+    outstream.write(string)
+
+def deserializeString16(instream):
+    """
+    Deserialize a string with a length in the range (0 <= len < 2^16).
+    """
+
+    string_len = deserializeShort(instream)
+    return instream.read(string_len)
+
+def serializeString32(outstream, string):
+    """
+    Serialize a string with a length in the range (0 <= len < 2^32).
+    """
+
+    serializeInt(outstream, len(string))
+    outstream.write(string)
+
+def deserializeString32(instream):
+    """
+    Deserialize a string with a length in the range (0 <= len < 2^32).
+    """
+
+    string_len = deserializeInt(instream)
+    return instream.read(string_len)
+
+def serializeString64(outstream, string):
+    """
+    Serialize a string with a length in the range (0 <= len < 2^64).
+    """
+
+    serializeLong(outstream, len(string))
+    outstream.write(string)
+
+def deserializeString64(instream):
+    """
+    Deserialize a string with a length in the range (0 <= len < 2^64).
+    """
+
+    string_len = deserializeLong(instream)
+    return instream.read(string_len)
+
+def serializeString(outstream, string):
+    """
+    Serialize a string with a length in the range (0 <= len < 256).
+    """
+
+    serializeIntVar(outstream, len(string))
+    outstream.write(string)
+
+def deserializeString(instream):
+    """
+    Deserialize a string with a length in the range (0 <= len < 256).
+    """
+
+    string_len = deserializeIntVar(instream)
+    return instream.read(string_len)
+
