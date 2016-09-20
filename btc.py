@@ -32,20 +32,17 @@ class BTagByte(object):
     BTagBase class for the unsigned char type.
     """
 
-    def __init__(self):
-        self.data = 0
-
-    def __init__(self, byte_value):
+    def __init__(self, byte_value=0):
         self.data = byte_value
 
     def getTypeID(self):
         return DataType.UINT8
 
     def serialize(self, outstream):
-        serialize.serializeByte(outstream, self.data)
+        serialization.serializeByte(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeByte(instream)
+        self.data = serialization.deserializeByte(instream)
 
     def toString(self, increment):
         return "b{"+str(self.data)+"}"
@@ -55,20 +52,17 @@ class BTagShort(object):
     BTagBase class for the unsigned short type.
     """
 
-    def __init__(self):
-        self.data = 0
-
-    def __init__(self, short_value):
+    def __init__(self, short_value=0):
         self.data = short_value
 
     def getTypeID(self):
         return DataType.UINT16
 
     def serialize(self, outstream):
-        serialize.serializeShort(outstream, self.data)
+        serialization.serializeShort(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeShort(instream)
+        self.data = serialization.deserializeShort(instream)
 
     def toString(self, increment):
         return "s{"+str(self.data)+"}"
@@ -78,20 +72,17 @@ class BTagInt(object):
     BTagBase class for the unsigned long type.
     """
 
-    def __init__(self):
-        self.data = 0
-
-    def __init__(self, int_value):
+    def __init__(self, int_value=0):
         self.data = int_value
 
     def getTypeID(self):
         return DataType.UINT32
 
     def serialize(self, outstream):
-        serialize.serializeInt(outstream, self.data)
+        serialization.serializeInt(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeInt(instream)
+        self.data = serialization.deserializeInt(instream)
 
     def toString(self, increment):
         return "i{"+str(self.data)+"}"
@@ -101,20 +92,17 @@ class BTagLong(object):
     BTagBase class for the unsigned long long type.
     """
 
-    def __init__(self):
-        self.data = 0
-
-    def __init__(self, long_value):
+    def __init__(self, long_value=0):
         self.data = long_value
 
     def getTypeID(self):
         return DataType.UINT64
 
     def serialize(self, outstream):
-        serialize.serializeLong(outstream, self.data)
+        serialization.serializeLong(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeLong(instream)
+        self.data = serialization.deserializeLong(instream)
 
     def toString(self, increment):
         return "l{"+str(self.data)+"}"
@@ -124,20 +112,17 @@ class BTagFloat(object):
     BTagBase class for the float type.
     """
 
-    def __init__(self):
-        self.data = 0.
-
-    def __init__(self, float_value):
+    def __init__(self, float_value=0.):
         self.data = float_value
 
     def getTypeID(self):
         return DataType.FLOAT
 
     def serialize(self, outstream):
-        serialize.serializeFloat(outstream, self.data)
+        serialization.serializeFloat(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeFloat(instream)
+        self.data = serialization.deserializeFloat(instream)
 
     def toString(self, increment):
         return "f{"+str(self.data)+"}"
@@ -147,20 +132,17 @@ class BTagDouble(object):
     BTagBase class for the double type.
     """
 
-    def __init__(self):
-        self.data = 0.
-
-    def __init__(self, double_value):
+    def __init__(self, double_value=0.):
         self.data = double_value
 
     def getTypeID(self):
         return DataType.DOUBLE
 
     def serialize(self, outstream):
-        serialize.serializeDouble(outstream, self.data)
+        serialization.serializeDouble(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeDouble(instream)
+        self.data = serialization.deserializeDouble(instream)
 
     def toString(self, increment):
         return "d{"+str(self.data)+"}"
@@ -170,20 +152,17 @@ class BTagString(object):
     BTagBase class for the string type.
     """
 
-    def __init__(self):
-        self.data = ""
-
-    def __init__(self, string_value):
+    def __init__(self, string_value=""):
         self.data = string_value
 
     def getTypeID(self):
         return DataType.STRING
 
     def serialize(self, outstream):
-        serialize.serializeString(outstream, self.data)
+        serialization.serializeString(outstream, self.data)
 
     def deserialize(self, instream):
-        self.data = serialize.deserializeString(instream)
+        self.data = serialization.deserializeString(instream)
 
     def toString(self, increment):
         return "st{\""+str(self.data)+"\"}"
@@ -260,6 +239,47 @@ class BTagCompound(object):
 
     def getTypeID(self):
         return DataType.COMPOUND
+
+    def serialize(self, outstream):
+        # Serialize number of data entries
+        serialization.serializeIntVar(outstream, len(self._datalist))
+        for dataobj in self._datalist:
+            # Tag
+            serialization.serializeString8(outstream, dataobj[0])
+            # Data type
+            serialization.serializeByte(outstream, dataobj[1].getTypeID())
+            # Object
+            dataobj[1].serialize(outstream)
+
+    def deserialize(self, instream):
+        data_len = serialization.deserializeIntVar(instream)
+        type_temp = 0
+        for i in range(data_len):
+            tag = serialization.deserializeString8(instream)
+            type_temp = serialization.deserializeByte(instream)
+            if type_temp == DataType.COMPOUND:
+                self._datalist.append((tag, BTagCompound()))
+            elif type_temp == DataType.STRING:
+                self._datalist.append((tag, BTagString()))
+            elif type_temp == DataType.UINT8:
+                self._datalist.append((tag, BTagByte()))
+            elif type_temp == DataType.UINT16:
+                self._datalist.append((tag, BTagShort()))
+            elif type_temp == DataType.UINT32:
+                self._datalist.append((tag, BTagInt()))
+            elif type_temp == DataType.UINT64:
+                self._datalist.append((tag, BTagLong()))
+            elif type_temp == DataType.FLOAT:
+                self._datalist.append((tag, BTagFloat()))
+            elif type_temp == DataType.DOUBLE:
+                self._datalist.append((tag, BTagDouble()))
+            self._tagmap.append((tag, len(self._datalist)))
+            self._tags.append(tag)
+            self._datalist[-1][1].deserialize(instream)
+        if len(self._tagmap) > 1:
+            self._tagmap.sort(key=lambda x: x[0])
+            for i in range(len(self._tagmap)):
+                self._tags[i] = self._tagmap[i][0]
 
     def toString(self, increment):
         rep = "c{"
