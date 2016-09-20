@@ -47,6 +47,9 @@ class BTagByte(object):
     def toString(self, increment):
         return "b{"+str(self.data)+"}"
 
+    def __str__(self):
+        return self.toString(0)
+
 class BTagShort(object):
     """
     BTagBase class for the unsigned short type.
@@ -66,6 +69,9 @@ class BTagShort(object):
 
     def toString(self, increment):
         return "s{"+str(self.data)+"}"
+
+    def __str__(self):
+        return self.toString(0)
 
 class BTagInt(object):
     """
@@ -87,6 +93,9 @@ class BTagInt(object):
     def toString(self, increment):
         return "i{"+str(self.data)+"}"
 
+    def __str__(self):
+        return self.toString(0)
+
 class BTagLong(object):
     """
     BTagBase class for the unsigned long long type.
@@ -106,6 +115,9 @@ class BTagLong(object):
 
     def toString(self, increment):
         return "l{"+str(self.data)+"}"
+
+    def __str__(self):
+        return self.toString(0)
 
 class BTagFloat(object):
     """
@@ -127,6 +139,9 @@ class BTagFloat(object):
     def toString(self, increment):
         return "f{"+str(self.data)+"}"
 
+    def __str__(self):
+        return self.toString(0)
+
 class BTagDouble(object):
     """
     BTagBase class for the double type.
@@ -147,6 +162,9 @@ class BTagDouble(object):
     def toString(self, increment):
         return "d{"+str(self.data)+"}"
 
+    def __str__(self):
+        return self.toString(0)
+
 class BTagString(object):
     """
     BTagBase class for the string type.
@@ -166,6 +184,170 @@ class BTagString(object):
 
     def toString(self, increment):
         return "st{\""+str(self.data)+"\"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagByteArr(object):
+    """
+    BTagBase class for the unsigned char* type.
+    """
+
+    def __init__(self, byte_array=[]):
+        self.data = byte_array
+
+    def getTypeID(self):
+        return DataType.UINT8_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeByteArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeByteArray(instream)
+
+    def toString(self, increment):
+        return "ba{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagShortArr(object):
+    """
+    BTagBase class for the unsigned short type.
+    """
+
+    def __init__(self, short_array=[]):
+        self.data = short_array
+
+    def getTypeID(self):
+        return DataType.UINT16_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeShortArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeShortArray(instream)
+
+    def toString(self, increment):
+        return "sa{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagIntArr(object):
+    """
+    BTagBase class for the unsigned long type.
+    """
+
+    def __init__(self, int_array=[]):
+        self.data = int_array
+
+    def getTypeID(self):
+        return DataType.UINT32_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeIntArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeIntArray(instream)
+
+    def toString(self, increment):
+        return "ia{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagLongArr(object):
+    """
+    BTagBase class for the unsigned long long type.
+    """
+
+    def __init__(self, long_array=[]):
+        self.data = long_array
+
+    def getTypeID(self):
+        return DataType.UINT64_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeLongArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeLongArray(instream)
+
+    def toString(self, increment):
+        return "la{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagFloatArr(object):
+    """
+    BTagBase class for the float type.
+    """
+
+    def __init__(self, float_array=[]):
+        self.data = float_array
+
+    def getTypeID(self):
+        return DataType.FLOAT_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeFloatArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeFloatArray(instream)
+
+    def toString(self, increment):
+        return "fa{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagDoubleArr(object):
+    """
+    BTagBase class for the double type.
+    """
+
+    def __init__(self, double_array=[]):
+        self.data = double_array
+
+    def getTypeID(self):
+        return DataType.DOUBLE_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeDoubleArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeDoubleArray(instream)
+
+    def toString(self, increment):
+        return "da{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
+
+class BTagStringArr(object):
+    """
+    BTagBase class for the string type.
+    """
+
+    def __init__(self, string_array=[]):
+        self.data = string_array
+
+    def getTypeID(self):
+        return DataType.STRING_ARR
+
+    def serialize(self, outstream):
+        serialization.serializeStringArray(outstream, self.data)
+
+    def deserialize(self, instream):
+        self.data = serialization.deserializeStringArray(instream)
+
+    def toString(self, increment):
+        return "sta{len="+str(len(self.data))+"}"
+
+    def __str__(self):
+        return self.toString(0)
 
 class BTagCompound(object):
     """
@@ -222,17 +404,44 @@ class BTagCompound(object):
     def setString(self, tag, string_val):
         self.setTag(tag, BTagString(string_val))
 
-    def getValue(self, tag):
+    def setByteArray(self, tag, byte_arr):
+        self.setTag(tag, BTagByteArr(byte_arr))
+
+    def setShortArray(self, tag, short_arr):
+        self.setTag(tag, BTagShortArr(short_arr))
+
+    def setIntArray(self, tag, int_arr):
+        self.setTag(tag, BTagIntArr(int_arr))
+
+    def setLongArray(self, tag, long_arr):
+        self.setTag(tag, BTagLongArr(long_arr))
+
+    def setFloatArray(self, tag, float_arr):
+        self.setTag(tag, BTagFloatArr(float_arr))
+
+    def setDoubleArray(self, tag, double_arr):
+        self.setTag(tag, BTagDoubleArr(double_arr))
+
+    def setStringArray(self, tag, string_arr):
+        self.setTag(tag, BTagStringArr(string_arr))
+
+    def getTag(self, tag):
         # Search for the tag
         if (len(self._tagmap) > 0):
             i = bisect.bisect_left(self._tags, tag)
             # Tag exists -> store new value
             if i != len(self._tagmap) and self._tagmap[i][0] == tag:
-                return self._datalist[self._tagmap[i][1]][1].data
+                return self._datalist[self._tagmap[i][1]][1]
             else:
                 return None
         else:
             return None
+
+    def getEntry(self, tag):
+        result = self.getTag(tag)
+        if result != None:
+            return result.data
+        return result
 
     def size(self):
         return len(self._datalist)
@@ -273,7 +482,21 @@ class BTagCompound(object):
                 self._datalist.append((tag, BTagFloat()))
             elif type_temp == DataType.DOUBLE:
                 self._datalist.append((tag, BTagDouble()))
-            self._tagmap.append((tag, len(self._datalist)))
+            elif type_temp == DataType.STRING_ARR:
+                self._datalist.append((tag, BTagStringArr()))
+            elif type_temp == DataType.UINT8_ARR:
+                self._datalist.append((tag, BTagByteArr()))
+            elif type_temp == DataType.UINT16_ARR:
+                self._datalist.append((tag, BTagShortArr()))
+            elif type_temp == DataType.UINT32_ARR:
+                self._datalist.append((tag, BTagIntArr()))
+            elif type_temp == DataType.UINT64_ARR:
+                self._datalist.append((tag, BTagLongArr()))
+            elif type_temp == DataType.FLOAT_ARR:
+                self._datalist.append((tag, BTagFloatArr()))
+            elif type_temp == DataType.DOUBLE_ARR:
+                self._datalist.append((tag, BTagDoubleArr()))
+            self._tagmap.append((tag, len(self._datalist)-1))
             self._tags.append(tag)
             self._datalist[-1][1].deserialize(instream)
         if len(self._tagmap) > 1:
@@ -296,4 +519,7 @@ class BTagCompound(object):
             rep += ' '
         rep += "}"
         return rep
+
+    def __str__(self):
+        return self.toString(0)
 

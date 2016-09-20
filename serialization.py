@@ -4,6 +4,13 @@ Fundamental serialization functions for the primitive types.
 
 import math
 
+# Check numpy availability
+ASSERT_NUMPY = True
+try:
+    import numpy
+except ImportError:
+    ASSERT_NUMPY = False
+
 def serializeByte(outstream, byte):
     """
     Serialize a single byte.
@@ -377,4 +384,217 @@ def deserializeString(instream):
 
     string_len = deserializeIntVar(instream)
     return instream.read(string_len)
+
+def serializeByteArray(outstream, byte_arr):
+    """
+    Serialize a single byte.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        byte: Integer value in the range (0 <= byte < 255).
+    """
+
+    serializeIntVar(outstream, len(byte_arr))
+    for x in byte_arr:
+        serializeByte(outstream, x)
+
+def deserializeByteArray(instream):
+    """
+    Deserialize a single byte.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = None
+    if ASSERT_NUMPY:
+        array = numpy.empty(array_len, dtype=numpy.uint8)
+    else:
+        array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeByte(instream)
+    return array
+
+def serializeShortArray(outstream, short_arr):
+    """
+    Serialize a short integer.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        short_integer: Integer value in the range (0 <= byte < 65536).
+    """
+
+    serializeIntVar(outstream, len(short_arr))
+    for x in short_arr:
+        serializeShort(outstream, x)
+
+def deserializeShortArray(instream):
+    """
+    Deserialize a short integer.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = None
+    if ASSERT_NUMPY:
+        array = numpy.empty(array_len, dtype=numpy.uint16)
+    else:
+        array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeShort(instream)
+    return array
+
+def serializeIntArray(outstream, integer_arr):
+    """
+    Serialize an integer.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        integer: Integer value in the range (0 <= byte < 4294967296).
+    """
+
+    serializeIntVar(outstream, len(integer_arr))
+    for x in integer_arr:
+        serializeInt(outstream, x)
+
+def deserializeIntArray(instream):
+    """
+    Deserialize an integer.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = None
+    if ASSERT_NUMPY:
+        array = numpy.empty(array_len, dtype=numpy.uint32)
+    else:
+        array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeInt(instream)
+    return array
+
+def serializeLongArray(outstream, long_arr):
+    """
+    Serialize a long integer.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        long_integer: Integer value in the range (0 <= byte < 2^64).
+    """
+
+    serializeIntVar(outstream, len(long_arr))
+    for x in long_arr:
+        serializeLong(outstream, x)
+
+def deserializeLongArray(instream):
+    """
+    Deserialize an integer.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = None
+    if ASSERT_NUMPY:
+        array = numpy.empty(array_len, dtype=numpy.uint64)
+    else:
+        array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeLong(instream)
+    return array
+
+def serializeFloatArray(outstream, float_arr):
+    """
+    Serialize a long integer.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        long_integer: Integer value in the range (0 <= byte < 2^64).
+    """
+
+    serializeIntVar(outstream, len(float_arr))
+    for x in float_arr:
+        serializeFloat(outstream, x)
+
+def deserializeFloatArray(instream):
+    """
+    Deserialize an integer.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = None
+    if ASSERT_NUMPY:
+        array = numpy.empty(array_len, dtype=numpy.float32)
+    else:
+        array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeFloat(instream)
+    return array
+
+def serializeDoubleArray(outstream, double_arr):
+    """
+    Serialize a long integer.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        long_integer: Integer value in the range (0 <= byte < 2^64).
+    """
+
+    serializeIntVar(outstream, len(double_arr))
+    for x in double_arr:
+        serializeDouble(outstream, x)
+
+def deserializeDoubleArray(instream):
+    """
+    Deserialize an integer.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = None
+    if ASSERT_NUMPY:
+        array = numpy.empty(array_len, dtype=numpy.float64)
+    else:
+        array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeDouble(instream)
+    return array
+
+def serializeStringArray(outstream, string_arr):
+    """
+    Serialize a long integer.
+
+    Args:
+        outstream: Stream object inheriting (io.RawIOBase).
+        long_integer: Integer value in the range (0 <= byte < 2^64).
+    """
+
+    serializeIntVar(outstream, len(string_arr))
+    for x in string_arr:
+        serializeString(outstream, x)
+
+def deserializeStringArray(instream):
+    """
+    Deserialize an integer.
+
+    Args:
+        instream: Stream object inheriting (io.RawIOBase).
+    """
+
+    array_len = deserializeIntVar(instream)
+    array = [None]*array_len
+    for i in range(array_len):
+        array[i] = deserializeString(instream)
+    return array
 
