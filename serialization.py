@@ -42,8 +42,8 @@ def serializeShort(outstream, short_integer):
     """
 
     data = int(short_integer)
-    serializeByte(outstream,data/256)
     serializeByte(outstream,data%256)
+    serializeByte(outstream,data/256)
 
 def deserializeShort(instream):
     """
@@ -53,8 +53,8 @@ def deserializeShort(instream):
         instream: Stream object inheriting (io.RawIOBase).
     """
 
-    data = deserializeByte(instream)*256
-    data += deserializeByte(instream)
+    data = deserializeByte(instream)
+    data += deserializeByte(instream)*256
     return data
 
 def serializeInt(outstream, integer):
@@ -67,8 +67,8 @@ def serializeInt(outstream, integer):
     """
 
     data = long(integer)
-    serializeShort(outstream, data/65536)
     serializeShort(outstream, data%65536)
+    serializeShort(outstream, data/65536)
 
 def deserializeInt(instream):
     """
@@ -78,8 +78,8 @@ def deserializeInt(instream):
         instream: Stream object inheriting (io.RawIOBase).
     """
 
-    data = long(deserializeShort(instream))*65536
-    data += deserializeShort(instream)
+    data = long(deserializeShort(instream))
+    data += long(deserializeShort(instream))*65536
     return(data)
 
 def serializeLong(outstream, long_integer):
@@ -92,8 +92,8 @@ def serializeLong(outstream, long_integer):
     """
 
     data = long(long_integer)
-    serializeInt(outstream, data/4294967296)
     serializeInt(outstream, data%4294967296)
+    serializeInt(outstream, data/4294967296)
 
 def deserializeLong(instream):
     """
@@ -103,8 +103,8 @@ def deserializeLong(instream):
         instream: Stream object inheriting (io.RawIOBase).
     """
 
-    data = long(deserializeInt(instream))*4294967296
-    data += deserializeInt(instream)
+    data = long(deserializeInt(instream))
+    data += long(deserializeInt(instream))*4294967296
     return(data)
 
 def serializeIntVar(outstream, int_val):
